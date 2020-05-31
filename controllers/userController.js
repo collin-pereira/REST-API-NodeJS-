@@ -53,6 +53,26 @@ const createUser = async(req, res) => {
     }
 }
 
+const updateUser = async(req, res) =>{
+    const {id} = req.params
+    try{
+        console.log('update user')
+        const exists = await helper.resourceExists(User,id)
+        if(!exists){
+            res.status(404).send(USER_NOT_FOUND)
+        }else{
+            await User.update(req.body,{
+                where:{
+                    id:id
+                }
+            })
+            res.status(200).send(SUCCESS)
+        }
+    }catch(error){
+        res.status(500).send(error)
+    }
+}
+
 const deleteUser = async(req, res)=>{
     console.log('delete user')
     const {id} = req.params
@@ -78,5 +98,6 @@ module.exports = {
     getAllUsers,
     getUser,
     createUser,
-    deleteUser
+    deleteUser,
+    updateUser
 }
